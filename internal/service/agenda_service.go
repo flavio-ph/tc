@@ -17,9 +17,12 @@ func NewAgendaService(repo *repository.AgendaRepository) *AgendaService {
 }
 
 func (s *AgendaService) RequestAgenda(agenda *models.Agenda) error {
-	if len(agenda.Empresa.CNPJ) != 14 {
-		return fmt.Errorf("CNPJ inválido: deve conter 14 dígitos")
+
+	validCNPJ, err := ValidateCNPJ(agenda.Empresa.CNPJ)
+	if err != nil {
+		return fmt.Errorf("CNPJ inválido: %v", err)
 	}
+	agenda.Empresa.CNPJ = validCNPJ
 
 	now := time.Now()
 	loc := now.Location()
@@ -56,17 +59,33 @@ func (s *AgendaService) ListAgendas() ([]models.Agenda, error) {
 		return nil, fmt.Errorf("erro ao listar agendas do repositório: %w", err)
 	}
 
+	cnpjCache := make(map[string]string)
+
 	for i := range agendas {
 		agendas[i].HorarioFormatado = agendas[i].Horario.Format("15:04")
+
+		cnpj := agendas[i].Empresa.CNPJ
+		if razao, ok := cnpjCache[cnpj]; ok {
+			agendas[i].Empresa.RazaoSocial = razao
+			continue
+		}
+
+		razao, err := ConsultaReceitaWS(cnpj)
+		if err != nil {
+			continue
+		}
+
+		agendas[i].Empresa.RazaoSocial = razao
+		cnpjCache[cnpj] = razao
 	}
 
 	return agendas, nil
 }
 
 type HorarioDisponibilidade struct {
-	Inicio     time.Time `json:"inicio"`
-	Fim        time.Time `json:"fim"`
-	Disponivel bool      `json:"disponivel"`
+	Inicio     string `json:"inicio"`
+	Fim        string `json:"fim"`
+	Disponivel bool   `json:"disponivel"`
 }
 
 func (s *AgendaService) CheckAvailability() ([]HorarioDisponibilidade, error) {
@@ -93,8 +112,8 @@ func (s *AgendaService) CheckAvailability() ([]HorarioDisponibilidade, error) {
 	for t := startOfDay; t.Before(endOfDay); t = t.Add(1 * time.Hour) {
 		isAvailable := !bookedTimes[t]
 		disponibilidades = append(disponibilidades, HorarioDisponibilidade{
-			Inicio:     t,
-			Fim:        t.Add(1 * time.Hour),
+			Inicio:     t.Format("15:04"),
+			Fim:        t.Add(1 * time.Hour).Format("15:04"),
 			Disponivel: isAvailable,
 		})
 	}

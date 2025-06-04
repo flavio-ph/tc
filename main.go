@@ -23,7 +23,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/agendas", agendaHandler.RequestAgendaHandler).Methods("POST")
 	r.HandleFunc("/agendas", agendaHandler.ListAgendasHandler).Methods("GET")
-	r.HandleFunc("/agendas/disponibilidade", agendaHandler.CheckAvailabilityHandler).Methods("GET")
+	r.HandleFunc("/agendas:disponibilidade", agendaHandler.CheckAvailabilityHandler).Methods("GET")
 
 	port := ":8080"
 	log.Printf("🚀 Servidor da API de Agendamento iniciado na porta %s", port)

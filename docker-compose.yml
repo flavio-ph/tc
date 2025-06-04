@@ -8,9 +8,21 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: agendamento_db
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+
+  goapp:
+    image: golang:latest
+    container_name: agendamento-go
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    command: go run main.go
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
 
 volumes:
   mysql_data:
