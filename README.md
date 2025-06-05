@@ -6,8 +6,7 @@ API REST em Go para cadastro e consulta de agendamentos por empresa, com horári
 
 1. Clone o repositório
 
-git clone https://github.com/flavio-ph/tc
-cd agendamento-api
+$ git clone https://github.com/flavio-ph/tc
 
 2. Configure o banco de dados
 
