@@ -4,12 +4,12 @@ API REST em Go para cadastro e consulta de agendamentos por empresa, com horári
 
 🚀 Como executar
 
-- 1. Clone o repositório
+1. Clone o repositório
 
 git clone https://github.com/seu-usuario/agendamento-api.git
 cd agendamento-api
 
-- 2. Configure o banco de dados
+2. Configure o banco de dados
 
 Crie um banco MySQL com as seguintes variáveis (padrão .env):
 DB_USER=seu-user
@@ -19,7 +19,7 @@ DB_PORT=3306
 DB_NAME=agendamento_db
 Você pode definir essas variáveis no terminal ou usar um .env.
 
-- 3. Crie a tabela necessária
+3. Crie a tabela necessária
 Execute o SQL abaixo no seu banco:
 
 CREATE TABLE agendas (
@@ -29,11 +29,11 @@ CREATE TABLE agendas (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-- 4. Instale as dependências
+4. Instale as dependências
 
 go mod tidy
 
-- 5. Execute a API
+5. Execute a API
 go run main.go
 A API estará disponível em: http://localhost:8080
  - Endpoints principais - 
