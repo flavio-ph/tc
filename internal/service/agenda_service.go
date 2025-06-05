@@ -62,6 +62,8 @@ func (s *AgendaService) ListAgendas() ([]models.Agenda, error) {
 	cnpjCache := make(map[string]string)
 
 	for i := range agendas {
+		agendas[i].Horario = agendas[i].Horario.Add(-3 * time.Hour)
+
 		agendas[i].HorarioFormatado = agendas[i].Horario.Format("15:04")
 
 		cnpj := agendas[i].Empresa.CNPJ
@@ -112,8 +114,8 @@ func (s *AgendaService) CheckAvailability() ([]HorarioDisponibilidade, error) {
 	for t := startOfDay; t.Before(endOfDay); t = t.Add(1 * time.Hour) {
 		isAvailable := !bookedTimes[t]
 		disponibilidades = append(disponibilidades, HorarioDisponibilidade{
-			Inicio:     t.Format("15:04"),
-			Fim:        t.Add(1 * time.Hour).Format("15:04"),
+			Inicio:     t.Format("10:00"),
+			Fim:        t.Add(1 * time.Hour).Format("10:00"),
 			Disponivel: isAvailable,
 		})
 	}

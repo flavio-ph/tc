@@ -23,7 +23,7 @@ func (h *AgendaHandler) RequestAgendaHandler(w http.ResponseWriter, r *http.Requ
 		Empresa struct {
 			CNPJ string `json:"cnpj"`
 		} `json:"empresa"`
-		Horario string `json:"horario"` // Recebe o horário como string "HH:MM"
+		Horario string `json:"horario"`
 	}
 
 	err := json.NewDecoder(r.Body).Decode(&req)
@@ -37,7 +37,12 @@ func (h *AgendaHandler) RequestAgendaHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	parsedTime, err := time.Parse("15:04", req.Horario)
+	loc, err := time.LoadLocation("America/Sao_Paulo")
+	if err != nil {
+		loc = time.Local
+	}
+
+	parsedTime, err := time.ParseInLocation("15:04", req.Horario, loc)
 	if err != nil {
 		httputils.RespondWithError(w, http.StatusBadRequest, "Formato de horário inválido. Use HH:MM (ex: 10:00).")
 		return
@@ -49,9 +54,9 @@ func (h *AgendaHandler) RequestAgendaHandler(w http.ResponseWriter, r *http.Requ
 		},
 		Horario: parsedTime,
 	}
+
 	err = h.service.RequestAgenda(agenda)
 	if err != nil {
-
 		httputils.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
