@@ -43,8 +43,5 @@ GET	/agendas	Lista todos os agendamentos
 GET	/agendas/disponibilidade	Mostra horários disponíveis
 
 🛠 Tecnologias
-Go (Golang)
-MySQL
-Gorilla Mux
-Docker
+Go (Golang), MySQL, Gorilla Mux, Docker
 
