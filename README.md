@@ -36,12 +36,9 @@ go mod tidy
 5. Execute a API
 go run main.go
 A API estará disponível em: http://localhost:8080
- - Endpoints principais - 
-Método	Rota	Descrição
-POST	/agendas	Cria um novo agendamento
-GET	/agendas	Lista todos os agendamentos
-GET	/agendas/disponibilidade	Mostra horários disponíveis
+Endpoints principais  
+POST	http://localhost:8080/agendas	Cria um novo agendamento | GET	http://localhost:8080/agendas	Lista todos os agendamentos | GET	http://localhost:8080/agendas/disponibilidade	Mostra horários disponíveis
 
 🛠 Tecnologias
-Go (Golang), MySQL, Gorilla Mux, Docker
+Go (Golang), MySQL, Gorilla Mux e Docker.
 
