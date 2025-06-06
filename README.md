@@ -35,6 +35,7 @@ go mod tidy
 5. Execute a API
 go run main.go
 A API estará disponível em: http://localhost:8080
+Para executar o docker utuilize o comando: $ docker compose up -d
 Endpoints principais  
 POST	http://localhost:8080/agendas	Cria um novo agendamento | GET	http://localhost:8080/agendas	Lista todos os agendamentos | GET	http://localhost:8080/agendas/disponibilidade	Mostra horários disponíveis
 
